@@ -1,8 +1,36 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import Icon from "@/components/ui/icon";
+import { useState } from "react";
 
 const Index = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    service: '',
+    master: '',
+    date: '',
+    time: '',
+    comment: ''
+  });
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitted(true);
+    setTimeout(() => setIsSubmitted(false), 3000);
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-barber-cream to-yellow-50">
       {/* Header */}
@@ -27,7 +55,7 @@ const Index = () => {
       </header>
 
       {/* Hero Section */}
-      <section id="home" className="py-20 px-6 text-center">
+      <section id="home" className="py-20 px-6 text-center animate-fade-in-up">
         <div className="container mx-auto">
           <h2 className="text-5xl font-vintage font-bold text-barber-dark mb-6">
             КЛАССИЧЕСКИЙ БАРБЕРШОП
@@ -49,27 +77,32 @@ const Index = () => {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-16 px-6 bg-barber-cream">
+      <section id="services" className="py-16 px-6 bg-barber-cream"
+        style={{
+          animationDelay: '0.2s',
+          animationFillMode: 'both'
+        }}
+      >
         <div className="container mx-auto">
           <h3 className="text-4xl font-vintage font-bold text-center text-barber-dark mb-12">
             НАШИ УСЛУГИ
           </h3>
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="bg-white border-barber-gold border-2">
+            <Card className="bg-white border-barber-gold border-2 hover:scale-105 transition-transform duration-300 animate-scale-in" style={{animationDelay: '0.3s', animationFillMode: 'both'}}>
               <CardContent className="p-6 text-center">
                 <Icon name="Scissors" size={48} className="text-barber-gold mx-auto mb-4" />
                 <h4 className="text-xl font-vintage font-semibold text-barber-dark mb-2">СТРИЖКИ</h4>
                 <p className="text-barber-brown">Классические и современные мужские стрижки от опытных мастеров</p>
               </CardContent>
             </Card>
-            <Card className="bg-white border-barber-gold border-2">
+            <Card className="bg-white border-barber-gold border-2 hover:scale-105 transition-transform duration-300 animate-scale-in" style={{animationDelay: '0.4s', animationFillMode: 'both'}}>
               <CardContent className="p-6 text-center">
                 <Icon name="User" size={48} className="text-barber-gold mx-auto mb-4" />
                 <h4 className="text-xl font-vintage font-semibold text-barber-dark mb-2">УХОД ЗА БОРОДОЙ</h4>
                 <p className="text-barber-brown">Моделирование, стрижка и уход за бородой и усами</p>
               </CardContent>
             </Card>
-            <Card className="bg-white border-barber-gold border-2">
+            <Card className="bg-white border-barber-gold border-2 hover:scale-105 transition-transform duration-300 animate-scale-in" style={{animationDelay: '0.5s', animationFillMode: 'both'}}>
               <CardContent className="p-6 text-center">
                 <Icon name="Zap" size={48} className="text-barber-gold mx-auto mb-4" />
                 <h4 className="text-xl font-vintage font-semibold text-barber-dark mb-2">БРИТЬЕ</h4>
@@ -223,11 +256,127 @@ const Index = () => {
               <h4 className="text-2xl font-vintage font-semibold text-barber-dark mb-6">Онлайн запись</h4>
               <Card className="bg-white border-barber-gold border-2">
                 <CardContent className="p-6">
-                  <p className="text-barber-brown mb-4">Запишитесь на удобное время прямо сейчас!</p>
-                  <Button className="w-full bg-barber-brown text-barber-cream hover:bg-barber-dark">
-                    <Icon name="Calendar" size={20} className="mr-2" />
-                    Записаться онлайн
-                  </Button>
+                  {isSubmitted ? (
+                    <div className="text-center py-8">
+                      <Icon name="CheckCircle" size={48} className="text-green-500 mx-auto mb-4" />
+                      <h5 className="text-xl font-vintage font-semibold text-barber-dark mb-2">Заявка отправлена!</h5>
+                      <p className="text-barber-brown">Мы свяжемся с вами в ближайшее время</p>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="name" className="text-barber-dark font-vintage">Имя *</Label>
+                          <Input 
+                            id="name"
+                            value={formData.name}
+                            onChange={(e) => handleInputChange('name', e.target.value)}
+                            className="border-barber-gold focus:border-barber-brown"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="phone" className="text-barber-dark font-vintage">Телефон *</Label>
+                          <Input 
+                            id="phone"
+                            type="tel"
+                            value={formData.phone}
+                            onChange={(e) => handleInputChange('phone', e.target.value)}
+                            className="border-barber-gold focus:border-barber-brown"
+                            placeholder="+7 (___) ___-__-__"
+                            required
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <Label className="text-barber-dark font-vintage">Услуга *</Label>
+                          <Select value={formData.service} onValueChange={(value) => handleInputChange('service', value)}>
+                            <SelectTrigger className="border-barber-gold focus:border-barber-brown">
+                              <SelectValue placeholder="Выберите услугу" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="haircut">Мужская стрижка (1200₽)</SelectItem>
+                              <SelectItem value="haircut-styling">Стрижка + укладка (1500₽)</SelectItem>
+                              <SelectItem value="beard">Моделирование бороды (800₽)</SelectItem>
+                              <SelectItem value="shave">Классическое бритье (1000₽)</SelectItem>
+                              <SelectItem value="complex">Комплекс (1800₽)</SelectItem>
+                              <SelectItem value="vip">VIP обслуживание (2500₽)</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label className="text-barber-dark font-vintage">Мастер</Label>
+                          <Select value={formData.master} onValueChange={(value) => handleInputChange('master', value)}>
+                            <SelectTrigger className="border-barber-gold focus:border-barber-brown">
+                              <SelectValue placeholder="Любой мастер" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="any">Любой мастер</SelectItem>
+                              <SelectItem value="vladimir">Владимир Петров</SelectItem>
+                              <SelectItem value="sergey">Сергей Иванов</SelectItem>
+                              <SelectItem value="alexey">Алексей Сидоров</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="date" className="text-barber-dark font-vintage">Дата *</Label>
+                          <Input 
+                            id="date"
+                            type="date"
+                            value={formData.date}
+                            onChange={(e) => handleInputChange('date', e.target.value)}
+                            className="border-barber-gold focus:border-barber-brown"
+                            min={new Date().toISOString().split('T')[0]}
+                            required
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-barber-dark font-vintage">Время *</Label>
+                          <Select value={formData.time} onValueChange={(value) => handleInputChange('time', value)}>
+                            <SelectTrigger className="border-barber-gold focus:border-barber-brown">
+                              <SelectValue placeholder="Выберите время" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="09:00">09:00</SelectItem>
+                              <SelectItem value="10:00">10:00</SelectItem>
+                              <SelectItem value="11:00">11:00</SelectItem>
+                              <SelectItem value="12:00">12:00</SelectItem>
+                              <SelectItem value="13:00">13:00</SelectItem>
+                              <SelectItem value="14:00">14:00</SelectItem>
+                              <SelectItem value="15:00">15:00</SelectItem>
+                              <SelectItem value="16:00">16:00</SelectItem>
+                              <SelectItem value="17:00">17:00</SelectItem>
+                              <SelectItem value="18:00">18:00</SelectItem>
+                              <SelectItem value="19:00">19:00</SelectItem>
+                              <SelectItem value="20:00">20:00</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label htmlFor="comment" className="text-barber-dark font-vintage">Комментарий</Label>
+                        <Textarea 
+                          id="comment"
+                          value={formData.comment}
+                          onChange={(e) => handleInputChange('comment', e.target.value)}
+                          className="border-barber-gold focus:border-barber-brown"
+                          placeholder="Дополнительные пожелания..."
+                          rows={3}
+                        />
+                      </div>
+
+                      <Button type="submit" className="w-full bg-barber-brown text-barber-cream hover:bg-barber-dark">
+                        <Icon name="Calendar" size={20} className="mr-2" />
+                        Записаться
+                      </Button>
+                    </form>
+                  )}
                 </CardContent>
               </Card>
             </div>

@@ -102,4 +102,8 @@
     background: linear-gradient(135deg, #f5e6d3 0%, #e8d5b7 100%);
     min-height: 100vh;
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
 }
